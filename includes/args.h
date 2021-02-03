@@ -2,7 +2,6 @@
 #define ARGS_H
 
 #include <stdbool.h>
-#include <getopt.h>
 
 /* Max size of a file name */
 #define FILE_NAME_SIZE 512
@@ -20,7 +19,7 @@ struct options
 typedef struct options options_t;
 
 /* Public functions section */
-void process_args(int argc, char* argv[], int options_size, options_t* options);
+void process_args(int start, int length, char *argv[], options_t *options, int options_size);
 void print_option_detail(options_t *option);
 
 

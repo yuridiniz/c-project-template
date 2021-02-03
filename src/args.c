@@ -10,7 +10,15 @@ void print_option_detail(options_t *option)
     if (strcmp(option->short_param, "") == 0 || strcmp(option->long_param, "") == 0 || strcmp(option->description, "") == 0)
         return;
 
-    printf("   %s,%s   %s\n", option->short_param, option->long_param, option->description);
+    int printted =0;
+    printted += printf("   %s", option->short_param);
+
+    if(strcmp(option->long_param, option->short_param) != 0){
+        printted += printf(", %s", option->long_param);
+    }
+
+    printf("%*s",25 - printted, " ");
+    printf("%s\n", option->description);
 }
 
 
@@ -32,12 +40,12 @@ options_t *find_options(char *str, int options_size, options_t *options)
 }
 
 
-void process_args(int argc, char *argv[], int options_size, options_t *options)
+void process_args(int start, int length, char *argv[], options_t *options, int options_size)
 {
-    int idx = -1;
+    int idx = start;
     options_t *option = NULL;
 
-    for (idx = 0; idx < argc; idx++)
+    for (; idx < length; idx++)
     {
         if (option != NULL)
             break;
@@ -48,6 +56,10 @@ void process_args(int argc, char *argv[], int options_size, options_t *options)
     if (option == NULL)
         option = find_options("", options_size, options);
 
-    if (option != NULL)
-        option->command(argc, argv, idx);
+    char x[4];
+    char *y = "abcd";
+
+    strcpy(x, y); // warn
+
+    option->command(length, argv, idx);
 }

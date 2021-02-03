@@ -2,6 +2,8 @@
     "files.associations": {
         "args.h": "c",
         "colors.h": "c",
-        "util.h": "c"
+        "util.h": "c",
+        "daemon.h": "c",
+        "unistd.h": "c"
     }
 }
