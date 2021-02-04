@@ -9,7 +9,7 @@
 # Project Infromation
 PROJ_NAME=mqttd
 AUTHOR_NAME=Yuri Araújo (contato@yuriaraujo.com)
-VERSION=0.0.1
+PROJECT_VERSION=0.0.1
 DESCRIPTION=A initial template project for C projects
 
 
@@ -23,10 +23,10 @@ H_SOURCE=$(wildcard $(H_FOLDER)*.h)
 
 CC=gcc
 CC_FLAGS= -I$(H_FOLDER) -std=gnu17 \
-			-D__PROJECT_NAME__=$(PROJ_NAME)
-			-D__AUTHOR_NAME__=$(AUTHOR_NAME)
-			-D__VERSION__=$(VERSION)
-			-D__DESCRIPTION__=$(DESCRIPTION)
+			-D__PROJECT_NAME__='"$(PROJ_NAME)"' \
+			-D__AUTHOR_NAME__='"$(AUTHOR_NAME)"' \
+			-D__PROJECT_VERSION__='"$(PROJECT_VERSION)"' \
+			-D__DESCRIPTION__='"$(DESCRIPTION)"'
 
 
 # Command used at clean target
@@ -38,13 +38,13 @@ RM = rm -rf
 ifeq ($(BUILD),debug)
     BUILD = debug
 	DIR = Debug
-	STRIPE=echo [SKIPPED] stripe
+	CMD_STRIP=echo [SKIPPED] strip
 
  	CC_FLAGS += -g3 -O0 -D_DEBUG -D_GLIBCXX_DEBUG -Wall -Wno-unknown-pragmas -Wno-format
 else
     BUILD = release
 	DIR = Release
-	STRIPE = stripe
+	CMD_STRIP = strip
 
  	CC_FLAGS += -O3
 endif
@@ -55,29 +55,36 @@ OBJECTS=$(subst .c,.o,$(subst src,$(OBJDIR)/$(DIR),$(C_SOURCE)))
 # # Instructions for building object files These are dependant on the Makefile so Makefile changes
 # # force a rebuild. Rule for files in the CISGENOMETOOLSDIR ensures that the .o is placed
 # # in the local object directory to keep it neat
-all: prepara $(BINDIR)/$(DIR)/$(PROJ_NAME) stripe
+all: prepara $(BINDIR)/$(DIR)/$(PROJ_NAME) stripcmd
 
 prepara:
 	@ mkdir -p "$(OBJDIR)/$(DIR)" || echo [SKIPED]
 	@ mkdir -p "$(BINDIR)/$(DIR)" || echo [SKIPED]
 
 $(BINDIR)/$(DIR)/$(PROJ_NAME): $(OBJECTS)
-	$(CC) $^ -o $@
+	@ echo [BUILDING] $< '>' $@
+	@ $(CC) $^ -o $@
 
 $(OBJDIR)/$(DIR)/%.o: ./src/%.c ./includes/%.h
-	$(CC) -c -o $@ $< $(CC_FLAGS)
+	@ echo [BUILDING] $< '>' $@
+	@ $(CC) -c -o $@ $< $(CC_FLAGS)
 
 $(OBJDIR)/$(DIR)/main.o: ./src/main.c $(H_SOURCE)
-	$(CC) -c -o $@ $< $(CC_FLAGS)
+	@ echo [BUILDING] $< '>' $@
+	@ $(CC) -c -o $@ $< $(CC_FLAGS)
 
-stripe: STRIPE $(BINDIR)/$(DIR)/PROJ_NAME
+stripcmd: 
+	@ $(CMD_STRIP) $(BINDIR)/$(DIR)/$(PROJ_NAME)
 
 release debug :
-	$(MAKE) BUILD=$@
+	@ $(MAKE) BUILD=$@
 
 clean:
 	@ $(RM) ./$(BINDIR)
 	@ $(RM) ./$(OBJDIR)
+
+install:
+	@ cp -f ./$(BINDIR)/$(DIR)/$(PROJ_NAME) /usr/bin/
 
 .PHONY: all release debug clean
 

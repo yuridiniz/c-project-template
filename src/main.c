@@ -10,6 +10,14 @@
 #include "daemon.h"
 #include "pidfile.h"
 
+#ifndef __DESCRIPTION__
+    #define __DESCRIPTION__ ""
+#endif
+
+#ifndef __PROJECT_VERSION__
+    #define __PROJECT_VERSION__ ""
+#endif
+
 void show_help_command(int argc, char *argv[], int index);
 void start_command(int argc, char *argv[], int index);
 void stop_command(int argc, char *argv[], int index);
@@ -88,7 +96,7 @@ void show_help_command(int argc, char *argv[], int index)
     UNUSED(argv);
     UNUSED(argc);
 
-    printf("A initial template project for C projects.\n\n");
+    printf("%s\n\n", __DESCRIPTION__);
     printf("Usage: %s [options]\n\n", argv[0]);
     printf("Options:\n");
 
@@ -98,7 +106,7 @@ void show_help_command(int argc, char *argv[], int index)
         print_option_detail(&option);
     }
     
-    printf("\n");
+    printf("\nVersion: %s\n\n", __PROJECT_VERSION__);
 }
 
 int main(int argc, char *argv[])
