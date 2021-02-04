@@ -14,12 +14,14 @@ void show_help_command(int argc, char *argv[], int index);
 void start_command(int argc, char *argv[], int index);
 void stop_command(int argc, char *argv[], int index);
 
+// Exemplo de opções
 static options_t options[] = {
-    {start_command,         "start",    "start", "  Iniciar o serviço"},
+    {start_command,         "start",    "start",    "Iniciar o serviço"},
     {stop_command,          "stop",     "stop",     "Para o serviço"},
     {show_help_command,     "-h",       "--help",   "Exibe os detalhes das operações"},
     {show_help_command,     "",         "",         ""},
 };
+
 
 void sigkill_handler(int _) {
     exit(0);
@@ -95,6 +97,7 @@ void show_help_command(int argc, char *argv[], int index)
         options_t option = options[i];
         print_option_detail(&option);
     }
+    
     printf("\n");
 }
 
