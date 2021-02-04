@@ -55,4 +55,12 @@ clean:
 	@ $(RM) ./build/bin/* $(PROJ_NAME) *~
 	@ $(RM) ./build
 
+
+install: 
+	@ mkdir -p /var/run/mqttd/
+	@ mkdir -p /etc/mqttd/
+	@ chmod -R 777 /var/run/mqttd/
+	@ chmod -R 777 /etc/mqttd/
+	@ cp -f ./build/bin/mqttd /usr/bin/
+	
 .PHONY: all clean

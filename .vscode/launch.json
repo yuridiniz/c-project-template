@@ -2,12 +2,12 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "name": "g++ build and debug active file",
+        "name": "mqttd start",
         "type": "cppdbg",
         "request": "launch",
         "program": "${workspaceFolder}/build/bin/mqttd",
-        "args": [],
-        "stopAtEntry": true,
+        "args": ["start"],
+        "stopAtEntry": false,
         "cwd": "${workspaceFolder}",
         "environment": [],
         "externalConsole": false,

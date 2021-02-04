@@ -4,6 +4,8 @@
         "colors.h": "c",
         "util.h": "c",
         "daemon.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "errno.h": "c",
+        "types.h": "c"
     }
 }
