@@ -28,10 +28,10 @@ options_t *find_options(char *str, int options_size, options_t *options)
 
     for (int opt = 0; opt < options_size; opt++)
     {
-        options_t val = (options[opt]);
-        if (strcmp(str, val.short_param) == 0 || strcmp(str, val.long_param) == 0)
+        options_t * val = &(options[opt]);
+        if (strcmp(str, val->short_param) == 0 || strcmp(str, val->long_param) == 0)
         {
-            option = &val;
+            option = val;
             break;
         }
     }
@@ -55,11 +55,6 @@ void process_args(int start, int length, char *argv[], options_t *options, int o
 
     if (option == NULL)
         option = find_options("", options_size, options);
-
-    char x[4];
-    char *y = "abcd";
-
-    strcpy(x, y); // warn
 
     option->command(length, argv, idx);
 }

@@ -62,7 +62,7 @@ void stop_command(int argc, char *argv[], int index) {
     char * pid_file = "/var/run/mqttd/mqttd.pid";
     
     int pid = check_daemon_to_stop(pid_file);
-    send_daemon_signal(pid, SIGKILL);
+    send_daemon_signal(pid, SIGTERM);
     
     remove(pid_file);
     exit(0);
