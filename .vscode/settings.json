@@ -6,6 +6,26 @@
         "daemon.h": "c",
         "unistd.h": "c",
         "errno.h": "c",
-        "types.h": "c"
+        "types.h": "c",
+        "pidfile.h": "c",
+        "server.h": "c",
+        "bufferevent.h": "c",
+        "listener.h": "c",
+        "buffer.h": "c",
+        "client.h": "c",
+        "stdlib.h": "c",
+        "cstring": "c",
+        "array": "c",
+        "string": "c",
+        "string_view": "c",
+        "protocol_ws.h": "c",
+        "protocol_tcp.h": "c",
+        "string.h": "c",
+        "thpool.h": "c",
+        "stdio.h": "c",
+        "*.tcc": "c",
+        "protocol_stack.h": "c",
+        "protocol_mqtt.h": "c",
+        "stdarg.h": "c"
     }
 }

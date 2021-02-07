@@ -14,6 +14,35 @@
           "kind": "build",
           "isDefault": true
         }
-      }
+      },
+      {
+        "label": "build (debug)",
+        "type": "shell",
+        "group": {
+            "kind": "build",
+            "isDefault": true
+        },
+        "windows": {
+            "command": "powershell",
+            "args": [
+                "-c",
+                "mingw32-make"
+            ]
+        },
+        "linux": {
+            "command": "bash",
+            "args": [
+                "-c",
+                "make debug",
+            ]
+        },
+        "osx": {
+            "command": "bash",
+            "args": [
+                "-c",
+                "make"
+            ]
+        }
+    },
     ]
   }

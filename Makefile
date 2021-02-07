@@ -1,10 +1,7 @@
-################################################################################
 #
-# Make all or Make debug makes the debug version
-# Make release to make the release version
+# 'make'        build executable file 'main'
+# 'make clean'  removes all .o and executable files
 #
-################################################################################
-# Standard rules and flags
 
 # Project Infromation
 PROJ_NAME=mqttd
@@ -16,13 +13,16 @@ DESCRIPTION=A initial template project for C projects
 #Build Standards
 BINDIR = bin
 OBJDIR = obj
-H_FOLDER=./includes/
+H_FOLDER=-Iinclude/ -I/usr/local/include/
+LIB_FOLDER=-L/usr/local/lib/
+USER_LIBS= -l:libevent.a -pthread
 
 C_SOURCE=$(wildcard ./src/*.c)
 H_SOURCE=$(wildcard $(H_FOLDER)*.h)
 
 CC=gcc
-CC_FLAGS= -I$(H_FOLDER) -std=gnu17 \
+CC_FLAGS := $(H_FOLDER) -std=gnu17 \
+ $(LIB_FOLDER) $(USER_LIBS) 
 			-D__PROJECT_NAME__='"$(PROJ_NAME)"' \
 			-D__AUTHOR_NAME__='"$(AUTHOR_NAME)"' \
 			-D__PROJECT_VERSION__='"$(PROJECT_VERSION)"' \
@@ -31,6 +31,11 @@ CC_FLAGS= -I$(H_FOLDER) -std=gnu17 \
 
 # Command used at clean target
 RM = rm -rf
+
+################################################################################
+# Setup enviroment variable
+
+## TODO
 
 ################################################################################
 # Setup debug and release variants
@@ -50,6 +55,7 @@ else
 endif
 
 OBJECTS=$(subst .c,.o,$(subst src,$(OBJDIR)/$(DIR),$(C_SOURCE)))
+
 # ##################################################################
 # #
 # # Instructions for building object files These are dependant on the Makefile so Makefile changes
@@ -62,16 +68,16 @@ prepara:
 	@ mkdir -p "$(BINDIR)/$(DIR)" || echo [SKIPED]
 
 $(BINDIR)/$(DIR)/$(PROJ_NAME): $(OBJECTS)
-	@ echo [BUILDING] $< '>' $@
-	@ $(CC) $^ -o $@
+	@ echo [BUILDING] $< '>' $@ 
+	 $(CC) $(LIB_FOLDER) $^ $(USER_LIBS) -o $@
 
-$(OBJDIR)/$(DIR)/%.o: ./src/%.c ./includes/%.h
+$(OBJDIR)/$(DIR)/%.o: ./src/%.c ./include/%.h
 	@ echo [BUILDING] $< '>' $@
 	@ $(CC) -c -o $@ $< $(CC_FLAGS)
 
 $(OBJDIR)/$(DIR)/main.o: ./src/main.c $(H_SOURCE)
 	@ echo [BUILDING] $< '>' $@
-	@ $(CC) -c -o $@ $< $(CC_FLAGS)
+	 $(CC) -c -o $@ $< $(CC_FLAGS)
 
 stripcmd: 
 	@ $(CMD_STRIP) $(BINDIR)/$(DIR)/$(PROJ_NAME)
@@ -88,40 +94,3 @@ install:
 
 .PHONY: all release debug clean
 
-# all: objFolder ./build/bin/$(PROJ_NAME)
-
-# ./build/bin/$(PROJ_NAME): $(OBJ)
-# 	@ echo 'Building binary using GCC linker: $@'
-# 	$(CC) $^ -o $@
-# 	@ echo 'Finished building binary: $@'
-# 	@ echo ' '
-
-# ./build/obj/%.o: ./src/%.c ./includes/%.h
-# 	@ echo 'Building target using GCC compiler: $<'
-# 	$(CC) -c -o $@ $< $(CC_FLAGS)
-# 	@ echo ' '
-
-# ./build/obj/main.o: ./src/main.c $(H_SOURCE)
-# 	@ echo 'Building target using GCC compiler: $<'
-# 	$(CC) -c -o $@ $< $(CC_FLAGS)
-# 	@ echo ' '
-
-# objFolder:
-# 	@ mkdir -p ./build/obj
-# 	@ mkdir -p ./build/bin
-
-# clean:
-# 	@ $(RM) ./build/obj/*.o $(PROJ_NAME) *~
-# 	@ $(RM) ./build/bin/* $(PROJ_NAME) *~
-# 	@ $(RM) ./build
-
-
-# install: 
-# 	@ mkdir -p /var/run/mqttd/
-# 	@ mkdir -p /etc/mqttd/
-# 	@ chmod -R 777 /var/run/mqttd/
-# 	@ chmod -R 777 /etc/mqttd/
-# 	@ cp -f ./build/bin/mqttd /usr/bin/
-	
-# .PHONY: all clean
-# .PHONY: all clean

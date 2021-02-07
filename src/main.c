@@ -5,10 +5,16 @@
 #include <signal.h>
 #include <errno.h>
 
+#include "server.h"
 #include "args.h"
 #include "util.h"
 #include "daemon.h"
 #include "pidfile.h"
+
+#include "protocol_ws.h"
+#include "protocol_tcp.h"
+#include "protocol_mqtt.h"
+
 
 #ifndef __DESCRIPTION__
     #define __DESCRIPTION__ ""
@@ -76,6 +82,37 @@ void stop_command(int argc, char *argv[], int index) {
     exit(0);
 }
 
+void start_tcp_mqtt_server() {
+    protocol_t * protocl_list[2];
+    protocl_list[0] = init_tcp_protocol();
+    protocl_list[1] = init_mqtt_protocol();
+
+    protocol_stack_t * stack = init_protocol_stack(protocl_list, 2);
+
+    server_t * server = init_server(10, 1, 16);
+    server->host = "0.0.0.0";
+    server->port = 8889;
+    server->protocol_stack = stack;
+
+    start_listern(server);
+}
+
+void start_ws_mqtt_server() {
+    protocol_t * protocl_list[3];
+    protocl_list[0] = init_tcp_protocol();
+    protocl_list[1] = init_ws_protocol();
+    protocl_list[2] = init_mqtt_protocol();
+
+    protocol_stack_t * stack = init_protocol_stack(protocl_list, 3);
+
+    server_t * server = init_server(10, 1, 16);
+    server->host = "0.0.0.0";
+    server->port = 8888;
+    server->protocol_stack = stack;
+
+    start_listern(server);
+}
+
 void start_command(int argc, char *argv[], int index) {
     char * pid_file = "/var/run/mqttd/mqttd.pid";
 
@@ -84,11 +121,11 @@ void start_command(int argc, char *argv[], int index) {
     daemon_signal_t config;
     config.sigkill_handler = sigkill_handler;
 
-    daemonize(&config);
+    // daemonize(&config);
 
     save_pid(pid_file);
 
-    pause();
+    start_ws_mqtt_server();
 }
 
 void show_help_command(int argc, char *argv[], int index)
