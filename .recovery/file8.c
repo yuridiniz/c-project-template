@@ -11,8 +11,8 @@
 #include "daemon.h"
 #include "pidfile.h"
 
-#include "protocol_dummy.h"
 #include "protocol_ws.h"
+#include "protocol_dummy.h"
 #include "protocol_tcp.h"
 #include "protocol_mqtt.h"
 
